@@ -1,0 +1,14 @@
+sendfile <%= configuration[:nginx][:sendfile] || "on" %>;
+gzip <%= configuration[:nginx][:gzip] || "on" %>;
+gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+
+keepalive_timeout <%= configuration[:nginx][:keepalive_timeout] || 65 %>;
+
+<% if configuration[:nginx][:extra] %>
+
+<% configuration[:nginx][:extra].each do |k,v| %>
+
+<%= k %> <%= v %>;
+<% end %>
+
+<% end %>

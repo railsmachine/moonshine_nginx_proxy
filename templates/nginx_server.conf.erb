@@ -1,0 +1,50 @@
+server {
+  listen <%= server[:port] %> <%= "ssl" if server[:use_ssl] %> <%= "spdy" if server[:use_spdy] %>;
+  server_name <%= server[:domain_names].join(" ") %>;
+  
+<% if server[:use_ssl] %>
+  ssl on;
+  ssl_certificate  <%= server[:ssl_certificate] %>;
+  ssl_certificate_key <%= server[:ssl_certificate_key] %>;
+
+  ssl_session_cache shared:SSL:1m;
+  ssl_session_timeout 5m;
+
+  ssl_ciphers HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers  on;
+<% end %>
+
+<% if configuration[:nginx][:error_pages] 
+files = []
+  %>
+  <% 
+  configuration[:nginx][:error_pages].each do |code, file| 
+    files << file
+  %>
+  error_page <%= code %> /<%= file %>;
+  <% end %>
+  
+  <% 
+  files.uniq!
+  files.each do |file| 
+  %>
+    location /<%= file %> {
+      root <%= configuration[:deploy_to] %>/current/public;
+    }
+  <% end %>
+<% end %>
+
+<% if server[:extra] %>
+<% server[:extra].each do |k,v| %>
+  <%= k %> <%= v %>;
+<% end %>
+<% end %>
+
+  location / {
+    proxy_pass http://<%= server[:backend] %>;
+    <% if server[:healthcheck] %>
+    health_check <%= server[:healthcheck] %>;
+    <% end %>
+  }
+
+}
