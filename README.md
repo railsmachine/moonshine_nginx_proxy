@@ -8,6 +8,8 @@ A moonshine plugin that installs, configures and manages [nginx](http://nginx.or
 
 Though it works and we're using it in production, we consider this plugin **beta** and only recommend you using it if you know what you're doing.
 
+We're still experimenting with monitoring and don't have any recommendations on that at this time.
+
 ## Some Notes on SSL & SPDY
 
 ### Certificate Chains
@@ -66,3 +68,9 @@ We use the configuration builders model from [moonshine_multi_server](https://gi
     503: 503.html
     504: 503.html
 ```
+
+Are we missing features or configuration options?  Fix it and submit a pull request!
+
+***
+
+Unless otherwise specified, all content copyright &copy; 2014, [Rails Machine, LLC](http://railsmachine.com)
