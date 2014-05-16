@@ -27,6 +27,8 @@ There are a few caveats.  The main one is that it only works on Ubuntu 12.04 and
 
 The other one, and it's a big one, is that the standard is developing and developing quickly. The nginx folks have been quick to implement the new versions, but who knows where it will go and what will change - another reason this plugin is considered beta.
 
+How do you test it?  Get the [SPDY Indicator](https://chrome.google.com/webstore/detail/spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin) plugin for Chrome and when you've got SPDY working, you'll see a little green lightning bolt in the address bar.
+
 
 ## Configuration
 
