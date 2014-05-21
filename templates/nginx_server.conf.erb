@@ -1,3 +1,7 @@
+<% if server[:use_ssl] %>
+proxy_set_header X-Forwarded-Port 443;
+<% end %>
+
 server {
   listen <%= server[:port] %> <%= "ssl" if server[:use_ssl] %> <%= "spdy" if server[:use_spdy] %>;
   server_name <%= server[:domain_names].join(" ") %>;
@@ -12,6 +16,7 @@ server {
 
   ssl_ciphers HIGH:!aNULL:!MD5;
   ssl_prefer_server_ciphers  on;
+  
 <% end %>
 
 <% if configuration[:nginx][:error_pages] 
@@ -46,7 +51,7 @@ files = []
     health_check <%= server[:healthcheck] %>;
     <% end %>
   }
-
+  
   location /nginx_status {
     stub_status on;
     access_log   off;
