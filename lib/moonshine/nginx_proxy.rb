@@ -21,7 +21,18 @@ module Moonshine
         content: "deb http://nginx.org/packages/mainline/ubuntu/ #{release_name} nginx",
         owner: 'root',
         ensure: :present
-    
+
+      user 'nginx',
+        shell: '/bin/false',
+        ensure: :present,
+        home: "/nonexistant",
+        managehome: false
+
+      file "/etc/apt/preferences.d/nginx-900",
+        content: template(File.join(File.dirname(__FILE__), '..', '..', 'templates', "nginx-preference")),
+        owner: 'root',
+        ensure: :present
+
       exec "download nginx repo key",
         cwd: "/tmp",
         command: "wget http://nginx.org/keys/nginx_signing.key",
@@ -39,7 +50,7 @@ module Moonshine
     
       package "nginx", 
         ensure: :installed,
-        require: [exec("nginx apt-get update")]
+        require: [exec("nginx apt-get update"), file('/etc/apt/preferences.d/nginx-900')]
     end
   
     def nginx_config
@@ -84,7 +95,7 @@ module Moonshine
         file "/etc/nginx/conf.d/frontend.#{server[:port]}.conf",
           content: template(File.join(File.dirname(__FILE__), '..', '..', 'templates', "nginx_server.conf.erb"), binding),
           owner: 'root',
-          notify: service("nginx")
+          notify: [service("nginx"), user('nginx')]
       end
     
     end
